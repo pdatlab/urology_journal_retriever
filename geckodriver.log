@@ -1,0 +1,44 @@
+1632341791519	geckodriver	INFO	Listening on 127.0.0.1:65315
+1632341794551	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\jbraun\\AppData\\Local\\Temp\\rust_mozprofileEqFPZO"
+1632341794975	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\jbraun\\AppData\\Local\\Temp\\rust_mozprofileEqFPZO\\search.json.mozlz4", (void 0)))
+1632341796585	Marionette	INFO	Listening on port 65326
+1632341796617	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://validate.onecount.net/js/all.min.js#cff4b10c3a3d5cc9bbb7e2b9292cc66eae1deafa, line 1: TypeError: document.body is null
+JavaScript error: , line 0: uncaught exception: undefined
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript error: resource:///actors/ContentMetaChild.jsm, line 179: InvalidStateError: JSWindowActorChild.sendAsyncMessage: JSWindowActorChild cannot send at the moment
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript error: resource:///actors/ContentMetaChild.jsm, line 179: InvalidStateError: JSWindowActorChild.sendAsyncMessage: JSWindowActorChild cannot send at the moment
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaa0JMMHHlXeFf7q-ZkWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://pagead2.googlesyndication.com/bg/WOdvqX5MrEWan8NE-dDT01W_bgveDh48divqo2Vh5b0.js line 1 > eval line 2888 > eval, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+1632341840138	Marionette	INFO	Stopped listening on port 65326
+JavaScript error: resource:///modules/Interactions.jsm, line 230: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIUserIdleService.removeIdleObserver]
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1632343246313	geckodriver	INFO	Listening on 127.0.0.1:63927
+1632343249360	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\jbraun\\AppData\\Local\\Temp\\rust_mozprofileJcdBBh"
+1632343249773	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\jbraun\\AppData\\Local\\Temp\\rust_mozprofileJcdBBh\\search.json.mozlz4", (void 0)))
+1632343251448	Marionette	INFO	Listening on port 63939
+1632343251506	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://validate.onecount.net/js/all.min.js#cff4b10c3a3d5cc9bbb7e2b9292cc66eae1deafa, line 1: TypeError: document.body is null
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaaJEi8FKZ0fi8I9c0kWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaaJEi8FKZ0fi8I9c0kWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaaJEi8FKZ0fi8I9c0kWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://beacon.riskified.com/?shop=https://bjui-journals.onlinelibrary.wiley.com&sid=aaaJEi8FKZ0fi8I9c0kWx, line 7: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://pagead2.googlesyndication.com/bg/WOdvqX5MrEWan8NE-dDT01W_bgveDh48divqo2Vh5b0.js line 1 > eval line 7458 > eval line 1 > eval, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+1632343275829	Marionette	INFO	Stopped listening on port 63939
+JavaScript error: resource:///modules/Interactions.jsm, line 230: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIUserIdleService.removeIdleObserver]
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
