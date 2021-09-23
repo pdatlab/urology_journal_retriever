@@ -3,13 +3,23 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 
 import os
 import shutil
 
-driver = webdriver.Firefox(executable_path=r"C:\Program Files\Mozilla Firefox\Driver\geckodriver.exe")
+
+profile = webdriver.FirefoxProfile()
+profile.set_preference("browser.download.folderList",2);
+profile.set_preference('browser.download.manager.showWhenStarting', False)
+profile.set_preference("browser.download.dir","c:\\BJUI\landing");
+profile.set_preference("browser.popups.showPopupBlocker", False);
+profile.set_preference("browser.helperApps.alwaysAsk.force", False);
+profile.update_preferences()
+# This sets browser preferences, such as download directory and allowing popups and direct downloads.
+
+driver = webdriver.Firefox(firefox_profile=profile, executable_path=r"C:\Program Files\Mozilla Firefox\Driver\geckodriver.exe")
+# driver loaded with specified profile and webdriver path
 
 def _years(start_year,end_year):
     while start_year <= end_year:
@@ -64,15 +74,5 @@ EXAMPLE of firefox autodownload solution from stackx
 I do not think download directory can be changed while in a loop. Files may have to be sorted by assigned name
     Assigning name to file by renaming last downloaded (Link:
                                             https://stackoverflow.com/questions/34548041/selenium-give-file-name-when-downloading)
-
-FirefoxProfile fxProfile = new FirefoxProfile();
-
-fxProfile.setPreference("browser.download.folderList",2);
-fxProfile.setPreference("browser.download.manager.showWhenStarting",false);
-fxProfile.setPreference("browser.download.dir","c:\\mydownloads");
-profile.setPreference(“browser.popups.showPopupBlocker”, false);
-setPreference("browser.helperApps.alwaysAsk.force", false);
-
-WebDriver driver = new FirefoxDriver(fxProfile);
-driver.navigate().to("http://www.foo.com/bah.csv");
 """
+
