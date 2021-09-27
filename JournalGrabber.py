@@ -4,23 +4,19 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+
 
 import time
 import os
 import shutil
 
+chromeOptions = webdriver.ChromeOptions()
+prefs = {"download.default_directory" : "C:\BJUI\Landing"}
+chromeOptions.add_experimental_option("prefs",prefs)
 
-profile = webdriver.FirefoxProfile()
-profile.set_preference("browser.download.folderList",2);
-profile.set_preference('browser.download.manager.showWhenStarting', False)
-profile.set_preference("browser.download.dir","c:\\BJUI\landing");
-profile.set_preference("browser.popups.showPopupBlocker", False);
-profile.set_preference("browser.helperApps.alwaysAsk.force", False);
-profile.update_preferences()
-# This sets browser preferences, such as download directory and allowing popups and direct downloads.
-
-driver = webdriver.Firefox(firefox_profile=profile, executable_path=r"C:\Program Files\Mozilla Firefox\Driver\geckodriver.exe")
-# driver loaded with specified profile and webdriver path
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=chromeOptions)
 
 start_year = int()
 volume_issue = []
@@ -43,8 +39,9 @@ def _issues():
         issue_list = driver.find_elements_by_class_name('visitable')
         issue_list[issue_num].click()
         volume_issue = driver.find_element_by_class_name('cover-image__parent-item').text
-        volume_issue.split(',')
-        volume_issue.replace(' ','_')
+        volume_issue = volume_issue.replace(' ','_')
+        volume_issue = volume_issue.split(",_")
+
         WebDriverWait(driver, 10).until(EC.presence_of_element_located
                                         ((By.CLASS_NAME, "issue-item__title"))) 
         article_list = driver.find_elements_by_class_name('issue-item__title')
@@ -66,17 +63,17 @@ def _issues():
 def _infoGrabber():
     title = driver.find_element_by_class_name('citation__title').text
     page = driver.find_element_by_class_name('page-range').text
-    driver.find_element_by_class_name('coolBar__ctrl pdf-download').click()
-    driver.send_keys("g")
+    driver.find_element_by_class_name('coolBar__section.coolBar--download.PdfLink.cloned').click()
+    # wait
+    driver.find_element_by_tag_name('body').send_keys('g')
     # shortcut for opening a download popup in the BJUI journal viewer
-    
     filename = _fileName(10)
-    source = "c:\\BJUI\landing" f"\{filename}" ".pdf" 
-    destination =  "c:\\BJUI\landing" f"\{volume_issue[0]}" f"_{start_year}" f"\{volume_issue[1]}"
+    source = "c:\\BJUI\\landing" f"\\{filename}" ".pdf" 
+    destination =  "c:\\BJUI" f"\\{volume_issue[0]}" f"_{start_year}" f"\\{volume_issue[1]}"
     f"\{title}" ".pdf" 
-    path = os.path.join("c:\\", destination)
+    path = os.path.join(destination)
     if not os.path.exists(path):
-        os.mkdir(path)
+        os.makedirs(path)
     # looks for existing file path, creates if absent    
     shutil.move(source,destination)
   
@@ -84,19 +81,25 @@ def _fileName(waitTime):
     # driver.execute_script("window.open()")
     # WebDriverWait(driver,10).until(EC.new_window_is_opened)
     # driver.switch_to.window(driver.window_handles[-1])
-    driver.get("about:downloads")
+    driver.get("chrome://downloads/")
     endTime = time.time()+waitTime
     while True:
         try:
-            fileName = driver.execute_script("return document.querySelector('#contentAreaDownloadsView .downloadMainArea .downloadContainer description:nth-of-type(1)').value")
-            if fileName:
-                return fileName
+            # get downloaded percentage
+            downloadPercentage = driver.execute_script(
+                "return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('#progress').value")
+            # check if downloadPercentage is 100 (otherwise the script will keep waiting)
+            if downloadPercentage == 100:
+                # return the file name once the download is completed
+                return driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text")
         except:
             pass
         time.sleep(1)
         if time.time() > endTime:
             break
-        # this goes into downloads and finds the name of the most recently downloaded file
+            # this goes into downloads and finds the name of the most recently downloaded file
+import pdb
+pdb.set_trace()
 _years(1996, 1997)
 
 
