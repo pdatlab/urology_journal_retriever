@@ -21,6 +21,7 @@ driver = webdriver.Chrome(ChromeDriverManager().install(), options=chromeOptions
 start_year = int()
 volume_issue = []
 
+
 def _years(start_year,end_year):
     while start_year <= end_year:
         driver.get("https://bjui-journals.onlinelibrary.wiley.com/loi/1464410x/year/"+str(start_year))
@@ -29,6 +30,7 @@ def _years(start_year,end_year):
         start_year += 1
         
 def _issues():
+    global volume_issue
     
     WebDriverWait(driver, 10).until(EC.presence_of_element_located
                                     ((By.CLASS_NAME, "visitable")))   
@@ -75,11 +77,9 @@ def _infoGrabber():
     time.sleep(2)
     # shortcut for opening a download popup in the BJUI journal viewer
     filename = _fileName(10)
-    import pdb
-    pdb.set_trace()
     source = "c:\\BJUI\\landing" f"\\{filename}"
-    destination =  "c:\\BJUI" f"\\{volume_issue[0]}" f"_{start_year}" f"\\{volume_issue[1]}"
-    f"\{title}" ".pdf" 
+   
+    destination =  "c:\\BJUI" f"\\{volume_issue[0]}" f"_{start_year}" f"\\{volume_issue[1]}" f"\\{title}" ".pdf" 
     path = os.path.join(destination)
     if not os.path.exists(path):
         os.makedirs(path)
