@@ -29,6 +29,7 @@ def _years(start_year,end_year):
         start_year += 1
         
 def _issues():
+    
     WebDriverWait(driver, 10).until(EC.presence_of_element_located
                                     ((By.CLASS_NAME, "visitable")))   
     issue_list = driver.find_elements_by_class_name('visitable')
@@ -38,6 +39,7 @@ def _issues():
     while issue_num <= len(issue_list):
         issue_list = driver.find_elements_by_class_name('visitable')
         issue_list[issue_num].click()
+        time.sleep(3)
         volume_issue = driver.find_element_by_class_name('cover-image__parent-item').text
         volume_issue = volume_issue.replace(' ','_')
         volume_issue = volume_issue.split(",_")
@@ -52,7 +54,8 @@ def _issues():
         while article_num <= len(article_list):
             article_list = driver.find_elements_by_class_name('issue-item__title')
             article_list[article_num].click()
-            # _infoGrabber()
+            time.sleep(3)
+            _infoGrabber()
             driver.get(article_link)
             WebDriverWait(driver, 10).until(EC.presence_of_element_located
                                         ((By.CLASS_NAME, "issue-item__title")))
@@ -64,11 +67,17 @@ def _infoGrabber():
     title = driver.find_element_by_class_name('citation__title').text
     page = driver.find_element_by_class_name('page-range').text
     driver.find_element_by_class_name('coolBar__section.coolBar--download.PdfLink.cloned').click()
+    time.sleep(3)
+    # TODO pdf link not interactable at default browser width
+    # get link without clicking
     # wait
     driver.find_element_by_tag_name('body').send_keys('g')
+    time.sleep(2)
     # shortcut for opening a download popup in the BJUI journal viewer
     filename = _fileName(10)
-    source = "c:\\BJUI\\landing" f"\\{filename}" ".pdf" 
+    import pdb
+    pdb.set_trace()
+    source = "c:\\BJUI\\landing" f"\\{filename}"
     destination =  "c:\\BJUI" f"\\{volume_issue[0]}" f"_{start_year}" f"\\{volume_issue[1]}"
     f"\{title}" ".pdf" 
     path = os.path.join(destination)
@@ -85,21 +94,21 @@ def _fileName(waitTime):
     endTime = time.time()+waitTime
     while True:
         try:
-            # get downloaded percentage
-            downloadPercentage = driver.execute_script(
-                "return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('#progress').value")
+            # https://stackoverflow.com/questions/34548041/selenium-give-file-name-when-downloading
+            # downloadPercentage = driver.execute_script(
+            #     "return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('#progress').value")
             # check if downloadPercentage is 100 (otherwise the script will keep waiting)
-            if downloadPercentage == 100:
+            time.sleep(10)
+            # if downloadPercentage == 100:
                 # return the file name once the download is completed
-                return driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text")
+            return driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text")
         except:
             pass
         time.sleep(1)
         if time.time() > endTime:
             break
             # this goes into downloads and finds the name of the most recently downloaded file
-import pdb
-pdb.set_trace()
+
 _years(1996, 1997)
 
 
