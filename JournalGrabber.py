@@ -12,6 +12,7 @@ import time
 import os
 import shutil
 
+# Setup of chrome preferences (download directory) -------
 chromeOptions = webdriver.ChromeOptions()
 prefs = {"download.default_directory" : "C:\BJUI\Landing"}
 chromeOptions.add_experimental_option("prefs",prefs)
@@ -68,23 +69,30 @@ def _issues():
 def _infoGrabber():
     title = driver.find_element_by_class_name('citation__title').text
     page = driver.find_element_by_class_name('page-range').text
-    driver.find_element_by_class_name('coolBar__section.coolBar--download.PdfLink.cloned').click()
+    doi = driver.find_element_by_class_name('epub-doi').text
+    doi.replace('https://doi.org/','')
+    doi.replace('.','_')
+    doi.replace('/','_')
+    pdflink = driver.find_element_by_class_name('coolBar__ctrl.pdf-download').get_attribute('href')
+    driver.get(pdflink)
     time.sleep(3)
-    # TODO pdf link not interactable at default browser width
-    # get link without clicking
-    # wait
+    rename = f"{volume_issue[0]}"f"_{volume_issue[1]}"f"_{doi}" f"_{title}.pdf"
+    if not driver.find_elements_by_id('app-navbar'):
+        print('Article not available for download: 'f"{rename}")
+        return
     driver.find_element_by_tag_name('body').send_keys('g')
     time.sleep(2)
     # shortcut for opening a download popup in the BJUI journal viewer
     filename = _fileName(10)
     source = "c:\\BJUI\\landing" f"\\{filename}"
    
-    destination =  "c:\\BJUI" f"\\{volume_issue[0]}" f"_{start_year}" f"\\{volume_issue[1]}" f"\\{title}" ".pdf" 
+    destination =  "c:\\BJUI" f"\\{start_year}"
     path = os.path.join(destination)
     if not os.path.exists(path):
         os.makedirs(path)
     # looks for existing file path, creates if absent    
     shutil.move(source,destination)
+    os.rename(f"{destination}"f"\\{filename}",f"{destination}"f"\\{rename}")
   
 def _fileName(waitTime):
     # driver.execute_script("window.open()")
