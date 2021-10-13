@@ -19,18 +19,17 @@ chromeOptions.add_experimental_option("prefs",prefs)
 
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=chromeOptions)
 
-start_year = int()
 volume_issue = []
 
 
-def _years(start_year,end_year):
+def years(start_year,end_year):
     while start_year <= end_year:
         driver.get("https://bjui-journals.onlinelibrary.wiley.com/loi/1464410x/year/"+str(start_year))
         driver.implicitly_wait(40)
-        _issues()
+        _issues(start_year)
         start_year += 1
         
-def _issues():
+def _issues(start_year):
     global volume_issue
     
     WebDriverWait(driver, 10).until(EC.presence_of_element_located
@@ -44,9 +43,9 @@ def _issues():
         issue_list[issue_num].click()
         time.sleep(3)
         volume_issue = driver.find_element_by_class_name('cover-image__parent-item').text
-        volume_issue = volume_issue.replace(' ','_')
-        volume_issue = volume_issue.split(",_")
-
+        volume_issue = volume_issue.replace('Volume ','V')
+        volume_issue = volume_issue.replace('Issue ','I')
+        volume_issue = volume_issue.split(", ")
         WebDriverWait(driver, 10).until(EC.presence_of_element_located
                                         ((By.CLASS_NAME, "issue-item__title"))) 
         article_list = driver.find_elements_by_class_name('issue-item__title')
@@ -58,7 +57,7 @@ def _issues():
             article_list = driver.find_elements_by_class_name('issue-item__title')
             article_list[article_num].click()
             time.sleep(3)
-            _infoGrabber()
+            _infoGrabber(start_year)
             driver.get(article_link)
             WebDriverWait(driver, 10).until(EC.presence_of_element_located
                                         ((By.CLASS_NAME, "issue-item__title")))
@@ -66,17 +65,19 @@ def _issues():
         driver.get(issue_link)
 
         
-def _infoGrabber():
+def _infoGrabber(start_year):
     title = driver.find_element_by_class_name('citation__title').text
     page = driver.find_element_by_class_name('page-range').text
     doi = driver.find_element_by_class_name('epub-doi').text
-    doi.replace('https://doi.org/','')
-    doi.replace('.','_')
-    doi.replace('/','_')
+    doi = doi.replace('https://doi.org/','')
+    doi = doi.replace('.','_')
+    doi = doi.replace('/','_')
     pdflink = driver.find_element_by_class_name('coolBar__ctrl.pdf-download').get_attribute('href')
     driver.get(pdflink)
     time.sleep(3)
     rename = f"{volume_issue[0]}"f"_{volume_issue[1]}"f"_{doi}" f"_{title}.pdf"
+    if len(rename) >= 255:
+        rename = rename[0:255]
     if not driver.find_elements_by_id('app-navbar'):
         print('Article not available for download: 'f"{rename}")
         return
@@ -92,8 +93,11 @@ def _infoGrabber():
         os.makedirs(path)
     # looks for existing file path, creates if absent    
     shutil.move(source,destination)
-    os.rename(f"{destination}"f"\\{filename}",f"{destination}"f"\\{rename}")
-  
+    try:
+        os.rename(f"{destination}"f"\\{filename}",f"{destination}"f"\\{rename}")
+    except FileExistsError:
+        os.remove(f"{destination}"f"\\{filename}")
+
 def _fileName(waitTime):
     # driver.execute_script("window.open()")
     # WebDriverWait(driver,10).until(EC.new_window_is_opened)
@@ -117,6 +121,7 @@ def _fileName(waitTime):
             break
             # this goes into downloads and finds the name of the most recently downloaded file
 
-_years(1996, 1997)
+years(1996, 1997)
+
 
 
