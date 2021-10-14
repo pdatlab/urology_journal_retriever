@@ -14,7 +14,7 @@ import shutil
 
 # Setup of chrome preferences (download directory) -------
 chromeOptions = webdriver.ChromeOptions()
-prefs = {"download.default_directory" : "C:\BJUI\Landing"}
+prefs = {"download.default_directory" : "C:\journals\BJUI\Landing"}
 chromeOptions.add_experimental_option("prefs",prefs)
 
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=chromeOptions)

@@ -3,6 +3,7 @@
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
@@ -41,13 +42,13 @@ def _issues(start_year):
     
     issue_num = 0
     while issue_num <= len(issue_list):
-        issue_list = driver.find_elements_by_class_name('issue__vol-issue')
-        issue_list[issue_num].click()
+        issue_list = driver.find_elements_by_xpath("//a[@class = 'issue__vol-issue']")
+        driver.get(issue_list[issue_num].get_attribute('href'))
         time.sleep(3)
-        volume= driver.find_element_by_class_name('volume').text
-        volume = volume.replace('Volume ','V')
-        issue= driver.find_element_by_class_name('issue').text
-        issue = issue.replace('Issue ','I')
+        volume_issue= driver.find_element_by_class_name('volume').get_attribute('innerText')
+        volume_issue = volume_issue.replace('Volume ','V')
+        volume_issue = volume_issue.replace('  ','_')
+        volume_issue = volume_issue.replace('Issue ','_I')
         WebDriverWait(driver, 10).until(EC.presence_of_element_located
                                         ((By.CLASS_NAME, "issue-item__title"))) 
         article_list = driver.find_elements_by_class_name('issue-item__title')
@@ -56,7 +57,7 @@ def _issues(start_year):
         
         article_num = 0
         while article_num <= len(article_list):
-            article_list = driver.find_elements_by_class_name('issue-item__title')
+            article_list = driver.find_elements_by_class_name('epub-section__item')
             article_list[article_num].click()
             time.sleep(3)
             _infoGrabber(start_year)
@@ -75,40 +76,54 @@ def _infoGrabber(start_year):
     doi = doi.replace('/','_')
     driver.find_element_by_id('download_Ctrl').click()
     pdflink = driver.find_element_by_class_name('coolBar__drop.rlist.w-slide--list.hidden-xs.hidden-sm.js--open')
+    action = ActionChains(driver)
+    action.move_to_element(pdflink).context_click().send_keys(Keys.ARROW_DOWN).send_keys(Keys.ARROW_DOWN).send_keys(Keys.RETURN).perform()
     action.context_click(pdflink).perform()
+    action.send_keys(Keys.ENTER);
+    action.send_keys(Keys.DOWN);
+    action.send_keys(Keys.DOWN);
+    action.send_keys(Keys.DOWN);
+    action.send_keys(Keys.DOWN);
+    action.send_keys(Keys.ENTER);
     # TODO Right click save as pdf
     time.sleep(3)
-    rename = f"{volume}"f"_{issue}"f"_{doi}" f"_{title}.pdf"
-    if len(rename) >= 255:
-        rename = rename[0:255]
+    import pdb
+    pdb.set_trace()
+    """
+    https://stackoverflow.com/questions/37835867/using-selenium-in-python-to-save-a-webpage-on-firefox
+    """
+    
+    # rename = f"{volume}"f"_{issue}"f"_{doi}" f"_{title}.pdf"
+    # if len(rename) >= 255:
+    #     rename = rename[0:255]
         
-    if not driver.find_elements_by_t
-        print('Article not available for download: 'f"{rename}")
-        return
-    # TODO Implement for AJP
+    # if not driver.find_elements_by_t
+    #     print('Article not available for download: 'f"{rename}")
+    #     return
+    # # TODO Implement for AJP
     
-    with open(f"{destination}"f"\\{rename}", "w") as f:
-        f.write(driver.page_source)
+    # with open(f"{destination}"f"\\{rename}", "w") as f:
+    #     f.write(driver.page_source)
         
-    source = driver.page_source
+    # source = driver.page_source
     
     
-    driver.find_element_by_id('download').click()
-    time.sleep(2)
-    # shortcut for opening a download popup in the BJUI journal viewer
-    filename = _fileName(10)
-    source = "c:\\BJUI\\landing" f"\\{filename}"
+    # driver.find_element_by_id('download').click()
+    # time.sleep(2)
+    # # shortcut for opening a download popup in the BJUI journal viewer
+    # filename = _fileName(10)
+    # source = "c:\\BJUI\\landing" f"\\{filename}"
    
-    destination =  "c:\\BJUI" f"\\{start_year}"
-    path = os.path.join(destination)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    # looks for existing file path, creates if absent    
-    shutil.move(source,destination)
-    try:
-        os.rename(f"{destination}"f"\\{filename}",f"{destination}"f"\\{rename}")
-    except FileExistsError:
-        os.remove(f"{destination}"f"\\{filename}")
+    # destination =  "c:\\BJUI" f"\\{start_year}"
+    # path = os.path.join(destination)
+    # if not os.path.exists(path):
+    #     os.makedirs(path)
+    # # looks for existing file path, creates if absent    
+    # shutil.move(source,destination)
+    # try:
+    #     os.rename(f"{destination}"f"\\{filename}",f"{destination}"f"\\{rename}")
+    # except FileExistsError:
+    #     os.remove(f"{destination}"f"\\{filename}")
 
 def _fileName(waitTime):
     # driver.execute_script("window.open()")
@@ -133,7 +148,7 @@ def _fileName(waitTime):
             break
             # this goes into downloads and finds the name of the most recently downloaded file
 
-years(1996, 1997)
+years(2001, 2001)
 
 
 
