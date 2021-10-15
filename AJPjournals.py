@@ -1,9 +1,7 @@
 
 
 from selenium import webdriver
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
@@ -16,14 +14,12 @@ import shutil
 
 # Setup of chrome preferences (download directory) -------
 chromeOptions = webdriver.ChromeOptions()
-prefs = {"download.default_directory" : "C:\\Journals\\ajp_renal_phys\\Landing"}
+prefs = {"plugins.always_open_pdf_externally": True,"download.default_directory" : "C:\\Journals\\ajp_renal_phys\\Landing", "download.extensions_to_open": "applications/pdf"}
 chromeOptions.add_experimental_option("prefs",prefs)
 
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=chromeOptions)
 
 volume_issue = []
-
-
 def years(start_year,end_year):
     while start_year <= end_year:
         decade = int(start_year*0.1)*10
@@ -70,60 +66,38 @@ def _issues(start_year):
         
 def _infoGrabber(start_year):
     title = driver.find_element_by_class_name('citation__title').text
+    title = title.replace('?','')
+    title = title.replace(':','')
     doi = driver.find_element_by_class_name('epub-section__doi__text').text
     doi = doi.replace('https://doi.org/','')
     doi = doi.replace('.','_')
     doi = doi.replace('/','_')
+    rename = f"{volume_issue}"f"_{doi}" f"_{title}.pdf"[0:255]
     driver.find_element_by_id('download_Ctrl').click()
-    pdflink = driver.find_element_by_class_name('coolBar__drop.rlist.w-slide--list.hidden-xs.hidden-sm.js--open')
-    action = ActionChains(driver)
-    action.move_to_element(pdflink).context_click().send_keys(Keys.ARROW_DOWN).send_keys(Keys.ARROW_DOWN).send_keys(Keys.RETURN).perform()
-    action.context_click(pdflink).perform()
-    action.send_keys(Keys.ENTER);
-    action.send_keys(Keys.DOWN);
-    action.send_keys(Keys.DOWN);
-    action.send_keys(Keys.DOWN);
-    action.send_keys(Keys.DOWN);
-    action.send_keys(Keys.ENTER);
-    # TODO Right click save as pdf
+    
+    if not driver.find_element_by_class_name('coolBar__drop.rlist.w-slide--list.hidden-xs.hidden-sm.js--open'):
+        print('Article not available for download: 'f"{rename}")
+        return
+    else:
+        driver.find_element_by_class_name('coolBar__drop.rlist.w-slide--list.hidden-xs.hidden-sm.js--open').click()
     time.sleep(3)
     import pdb
     pdb.set_trace()
-    """
-    https://stackoverflow.com/questions/37835867/using-selenium-in-python-to-save-a-webpage-on-firefox
-    """
-    
-    # rename = f"{volume}"f"_{issue}"f"_{doi}" f"_{title}.pdf"
-    # if len(rename) >= 255:
-    #     rename = rename[0:255]
-        
-    # if not driver.find_elements_by_t
-    #     print('Article not available for download: 'f"{rename}")
-    #     return
-    # # TODO Implement for AJP
-    
-    # with open(f"{destination}"f"\\{rename}", "w") as f:
-    #     f.write(driver.page_source)
-        
-    # source = driver.page_source
-    
-    
-    # driver.find_element_by_id('download').click()
-    # time.sleep(2)
-    # # shortcut for opening a download popup in the BJUI journal viewer
-    # filename = _fileName(10)
-    # source = "c:\\BJUI\\landing" f"\\{filename}"
-   
-    # destination =  "c:\\BJUI" f"\\{start_year}"
-    # path = os.path.join(destination)
-    # if not os.path.exists(path):
-    #     os.makedirs(path)
-    # # looks for existing file path, creates if absent    
-    # shutil.move(source,destination)
-    # try:
-    #     os.rename(f"{destination}"f"\\{filename}",f"{destination}"f"\\{rename}")
-    # except FileExistsError:
-    #     os.remove(f"{destination}"f"\\{filename}")
+
+    time.sleep(2)
+    filename = _fileName(10)
+    # Move & rename file ----------------
+    source = "C:\\Journals\\ajp_renal_phys\\Landing" f"\\{filename}"
+    destination =  "C:\\Journals\\ajp_renal_phys" f"\\{start_year}"
+    path = os.path.join(destination)
+    if not os.path.exists(path):
+        os.makedirs(path)
+    # looks for existing file path, creates if absent    
+    shutil.move(source,destination)
+    try:
+        os.rename(f"{destination}"f"\\{filename}",f"{destination}"f"\\{rename}")
+    except FileExistsError:
+        os.remove(f"{destination}"f"\\{filename}")
 
 def _fileName(waitTime):
     # driver.execute_script("window.open()")
